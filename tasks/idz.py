@@ -5,8 +5,9 @@
 # графе. Оценим время решения данной задачи, так как оно достаточно большое, уменьшим количество узлов и ребер
 # графа до 10.
 
-from itertools import combinations
+from itertools import permutations
 
+# Матрица расстояний между городами
 distance_dict = {
     'Оснабрюк': {'Оснабрюк': 0, 'Билефельд': 43, 'Ганновер': 140, 'Брауншвейг': 167,
                  'Магдебург': 353, 'Галле': float('inf'), 'Лейпциг': float('inf'),
@@ -53,59 +54,30 @@ distance_dict = {
 start_city = 'Оснабрюк'
 
 
-def nax_pyti(distance_dict, start_city):
-
+def solve_tsp(distance_dict, start_city):
     cities = list(distance_dict.keys())
     n = len(cities)
     start_index = cities.index(start_city)
+    
+    # Генерация всех возможных маршрутов (перестановок) кроме начального города
+    min_route_length = float('inf')
+    best_route = []
 
-    # Словарь для хранения минимальных расстояний для подмножеств
-    min_distances = {}
+    # Генерируем все перестановки всех городов, исключая начальный
+    for perm in permutations([i for i in range(n) if i != start_index]):
+        route = [start_index] + list(perm) + [start_index]
+        route_length = sum(distance_dict[cities[route[i]]][cities[route[i+1]]] for i in range(n))
 
-    # Начальная инициализация
-    for i in range(n):
-        if i != start_index:
-            min_distances[(1 << i, i)] = distance_dict[start_city][cities[i]]
+        # Обновляем лучший маршрут, если найден маршрут с меньшей длиной
+        if route_length < min_route_length:
+            min_route_length = route_length
+            best_route = [cities[i] for i in route]
 
-    # Заполняем min_distances для всех подмножеств
-    for subset_size in range(2, n):
-        for subset in combinations([i for i in range(n) if i != start_index], subset_size):
-            bits = sum(1 << i for i in subset)
-            for j in subset:
-                prev_bits = bits & ~(1 << j)
-                min_distances[(bits, j)] = min(
-                    min_distances[(prev_bits, k)] + distance_dict[cities[k]][cities[j]]
-                    for k in subset if k != j
-                )
-
-    # Завершение маршрута
-    bits = (1 << n) - 1 - (1 << start_index)
-    min_route_length = min(
-        min_distances[(bits, i)] + distance_dict[cities[i]][start_city]
-        for i in range(n) if i != start_index
-    )
-
-    # Восстановление пути
-    last_index = start_index
-    bits = (1 << n) - 1 - (1 << start_index)
-    route = [start_city]
-
-    for _ in range(n - 1):
-        index = min(
-            ((min_distances[(bits, j)] + distance_dict[cities[j]][cities[last_index]], j)
-             for j in range(n) if j != start_index and (bits & (1 << j))),
-            key=lambda x: x[0]
-        )[1]
-        route.append(cities[index])
-        bits &= ~(1 << index)
-        last_index = index
-
-    route.append(start_city)
-
-    return route, min_route_length
+    return best_route, min_route_length
 
 
 if __name__ == "__main__":
     # Выводим лучший маршрут и его длину
-    best_route, min_length = nax_pyti(distance_dict, start_city)
+    best_route, min_length = solve_tsp(distance_dict, start_city)
     print(f"Лучший маршрут: {' -> '.join(best_route)} с длиной {min_length} км")
+
