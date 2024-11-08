@@ -53,7 +53,7 @@ distance_dict = {
 start_city = 'Оснабрюк'
 
 
-def tsp_dynamic_programming(distance_dict, start_city):
+def nax_pyti(distance_dict, start_city):
 
     cities = list(distance_dict.keys())
     n = len(cities)
@@ -107,5 +107,5 @@ def tsp_dynamic_programming(distance_dict, start_city):
 
 if __name__ == "__main__":
     # Выводим лучший маршрут и его длину
-    best_route, min_length = tsp_dynamic_programming(distance_dict, start_city)
+    best_route, min_length = nax_pyti(distance_dict, start_city)
     print(f"Лучший маршрут: {' -> '.join(best_route)} с длиной {min_length} км")
