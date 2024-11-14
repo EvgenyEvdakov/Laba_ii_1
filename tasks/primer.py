@@ -9,33 +9,43 @@ from collections import deque
 
 
 class Problem:
-    """Абстрактный класс для формальной задачи.
-    Новый домен специализирует этот класс, переопределяя `actions` и `results`, и, возможно, другие методы.
-    Эвристика по умолчанию равна 0, а стоимость действия по умолчанию равна 1 для всех состояний.
-    Когда вы создаете экземпляр подкласса, укажите `начальное` и `целевое` состояния
-    (или задайте метод `is_goal`) и, возможно, другие ключевые слова для подкласса.
-    """
+    """Абстрактный класс для формальной задачи. Новый домен
+    специализирует этот класс,
+    переопределяя `actions` и `results`, и, возможно, другие методы.
+    Эвристика по умолчанию равна 0, а стоимость действия по умолчанию
+    равна 1 для всех состояний.
+    Когда вы создаете экземпляр подкласса, укажите `начальное` и
+    `целевое` состояния
+    (или задайте метод `is_goal`) и, возможно, другие ключевые слова для
+    подкласса."""
 
-    def __init__(self, initial=None, goal=None, **kwds):
-        self.__dict__.update(initial=initial, goal=goal, **kwds)
 
-    def actions(self, state):
-        raise NotImplementedError
+def __init__(self, initial=None, goal=None, **kwds):
+    self.__dict__.update(initial=initial, goal=goal, **kwds)
 
-    def result(self, state, action):
-        raise NotImplementedError
 
-    def is_goal(self, state):
-        return state == self.goal
+def actions(self, state):
+    raise NotImplementedError
 
-    def action_cost(self, s, a, s1):
-        return 1
 
-    def h(self, node):
-        return 0
+def result(self, state, action):
+    raise NotImplementedError
 
-    def __str__(self):
-        return "{}({!r}, {!r})".format(type(self).__name__, self.initial, self.goal)
+
+def is_goal(self, state):
+    return state == self.goal
+
+
+def action_cost(self, s, a, s1):
+    return 1
+
+
+def h(self, node):
+    return 0
+
+
+def __str__(self):
+    return "{}({!r}, {!r})".format(type(self).__name__, self.initial, self.goal)
 
 
 class Node:
@@ -82,7 +92,6 @@ def path_states(node):
     return path_states(node.parent) + [node.state]
 
 
-# Очереди FIFO и LIFO
 FIFOQueue = deque
 LIFOQueue = list
 
@@ -92,7 +101,7 @@ class PriorityQueue:
 
     def __init__(self, items=(), key=lambda x: x):
         self.key = key
-        self.items = []  # куча из пар (оценка, элемент)
+        self.items = []  # a heap of (score, item) pairs
         for item in items:
             self.add(item)
 
@@ -112,26 +121,3 @@ class PriorityQueue:
     def __len__(self):
         """Возвращаем количество элементов в очереди."""
         return len(self.items)
-
-
-# Пример использования классов и функций для тестирования
-if __name__ == "__main__":
-    # Пример использования очереди с приоритетом
-    pq = PriorityQueue(key=lambda x: x)
-    pq.add(10)
-    pq.add(1)
-    pq.add(5)
-    print("PriorityQueue (expected 1 first):")
-    while len(pq) > 0:
-        print(pq.pop())  # Должен выводить элементы в порядке 1, 5, 10
-
-    # Пример создания узлов и отображения пути
-    node1 = Node("Start")
-    node2 = Node("Next", parent=node1, action="Move forward")
-    node3 = Node("End", parent=node2, action="Finish")
-
-    print("\nPath actions:")
-    print(path_actions(node3))  # Должен вывести ["Move forward", "Finish"]
-
-    print("\nPath states:")
-    print(path_states(node3))  # Должен вывести ["Start", "Next", "End"]
