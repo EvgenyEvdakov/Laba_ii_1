@@ -1,5 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import unittest
-from idz import solve_tsp, distance_dict  # Имя файла с вашим кодом: tsp_solver.py
+import sys
+
+sys.path.append('../src')
+from idz import solve_tsp, distance_dict  
 
 
 class TestTSPSolver(unittest.TestCase):
