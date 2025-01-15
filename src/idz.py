@@ -162,5 +162,3 @@ if __name__ == "__main__":
     # Выводим лучший маршрут и его длину
     best_route, min_length = solve_tsp(distance_dict, start_city)
     print(f"Лучший маршрут: {' -> '.join(best_route)} с длиной {min_length} км")
-
-

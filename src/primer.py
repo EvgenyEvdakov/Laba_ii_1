@@ -55,7 +55,7 @@ class Node:
         self.__dict__.update(state=state, parent=parent, action=action, path_cost=path_cost)
 
     def __repr__(self):
-        return '<{}>'.format(self.state)
+        return "<{}>".format(self.state)
 
     def __len__(self):
         return 0 if self.parent is None else (1 + len(self.parent))
@@ -65,8 +65,8 @@ class Node:
 
 
 # Специальные узлы
-failure = Node('failure', path_cost=math.inf)  # Алгоритм не смог найти решение.
-cutoff = Node('cutoff', path_cost=math.inf)  # Указывает на то, что поиск с итеративным углублением был прерван.
+failure = Node("failure", path_cost=math.inf)  # Алгоритм не смог найти решение.
+cutoff = Node("cutoff", path_cost=math.inf)  # Указывает на то, что поиск с итеративным углублением был прерван.
 
 
 def expand(problem, node):
