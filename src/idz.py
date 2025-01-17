@@ -10,7 +10,7 @@ from itertools import permutations
 
 # Матрица расстояний между городами
 distance_dict = {
-    "Оснабрюк": { aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    "Оснабрюк": { aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         "Оснабрюк": 0,
         "Билефельд": 43,
         "Ганновер": 140,
